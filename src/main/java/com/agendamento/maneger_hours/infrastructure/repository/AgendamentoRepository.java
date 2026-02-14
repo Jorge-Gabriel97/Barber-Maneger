@@ -12,5 +12,8 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento,Long> {
     @Transactional
     void deleteByDataHoraAgendamentoAndCliente(LocalDateTime dataHoraAgendamento, String cliente);
 
+    // O nome deve ser findBy + NomeDoAtributo + Between
+    Agendamento findByDataHoraAgendamentoBetween(LocalDateTime inicio, LocalDateTime fim);
 
+    Agendamento findByDataHoraAgendamentoAndCliente(LocalDateTime dataHoraAgendamento, String cliente);
 }
