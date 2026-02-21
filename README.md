@@ -50,7 +50,24 @@ Abaixo estão as rotas disponíveis no sistema para gerenciar os agendamentos. A
 * **Descrição:** Busca um agendamento existente pelo nome do cliente e horário atual, e atualiza os dados com base no JSON enviado no corpo da requisição.
 * **Body (JSON):** Enviar os novos dados do agendamento (mesmo formato do POST).
 
+
+
 ### 4. Deletar Agendamento
 * **Rota:** PUT DELETE /agendamentos
 * **Parâmetros (Query):** ?cliente={nome}&dataHoraAgendamento={data-e-hora}
 * **Descrição:** Remove o agendamento do banco de dados correspondente ao cliente e horário informados.
+
+### 🐛 Problemas e Soluções (Follow the Data Flow)
+Seção dedicada ao registro de erros solucionados durante o desenvolvimento:
+
+1. Erro 500 (Internal Server Error) no PUT
+
+Causa: O código lançava uma RuntimeException genérica quando um agendamento não era encontrado, o que o Spring Boot interpreta como falha do servidor.
+
+Solução: Substituído por ResponseStatusException(HttpStatus.NOT_FOUND), garantindo que o cliente receba um erro 404 (semântico) em vez de um erro interno do servidor.
+
+2. Erro 400 (Bad Request) na Deserialização de Data
+
+Causa: Incompatibilidade entre o formato da String enviada pelo Postman (sem segundos) e a exigência padrão do LocalDateTime.
+
+Solução: Adicionada a anotação @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm") no atributo dataHoraAgendamento para alinhar a entrada de dados com a lógica de negócio.
